@@ -31,7 +31,8 @@ print(secret_key)
 
 
 # Bind the SQLAlchemy instance to the Flask app
-db.init_app(app)
+# silence the initialization below for postgresql use it for sqlite. 
+# db.init_app(app)
 
 # Initialize Flask-Migrate
 migrate = Migrate(app, db)
