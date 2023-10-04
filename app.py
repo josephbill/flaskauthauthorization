@@ -15,7 +15,9 @@ import os
 import base64
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+app.config['SLQALCHEMY_DATABASE_URI'] = 'postgres://authorizationapis_user:Qq49Xas6HCpsC1vaOsV13xxuLmgtq2I7@dpg-ckesr0ua3ovc739hg3gg-a.oregon-postgres.render.com/authorizationapis'
+
 
 # cloudinary 
 # Configure Cloudinary
