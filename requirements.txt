@@ -3,3 +3,4 @@ Flask-Migrate
 Flask-SQLAlchemy 
 pyJWT 
 cloudinary
+psycopg2-binary
