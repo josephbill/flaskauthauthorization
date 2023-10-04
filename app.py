@@ -10,6 +10,9 @@ import random
 import string
 import cloudinary
 import cloudinary.uploader
+import jwt
+import os 
+import base64
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
@@ -19,6 +22,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 # raw credentials are too exposed. 
 from utlis import cloudconfig
 cloudconfig
+
+# generating jwt secret key 
+secret_key = base64.b64encode(os.urandom(24)).decode('utf-8')
+print(secret_key)
 
 
 # Bind the SQLAlchemy instance to the Flask app
@@ -51,9 +58,53 @@ def login():
     user = User.query.filter_by(username=username).first()
 
     if user and check_password_hash(user.password, password):
-        return jsonify({'message': 'Login successful'})
+        # generate token with no expiry 
+        # token = jwt.encode({'user_id': user.id}, secret_key, algorithm='HS256')
+
+        # to generate a token with an expiration period 
+        # Set the expiration time to 1 hour from now // to set as minutes , use minutes , to set as seconds add as seconds.
+        expiration_time = datetime.utcnow() + timedelta(hours=1)
+        # Generate the JWT token with the 'exp' claim
+        token = jwt.encode({'user_id': user.id, 'exp': expiration_time}, secret_key, algorithm='HS256')
+        print(token)
+        return jsonify({'message': 'Login successful', 'token': token})
     else:
         return jsonify({'message': 'Invalid username or password'}), 401
+    
+# Helper function to decode the token
+def decode_token(token):
+    try:
+        payload = jwt.decode(token, secret_key, algorithms=['HS256'])
+        return payload
+    except jwt.ExpiredSignatureError:
+        return 'Token has expired. Please log in again.'
+    except jwt.InvalidTokenError:
+        return 'Invalid token. Please log in again.'
+
+
+# protected route example 
+# Protected route example
+@app.route('/protected', methods=['GET'])
+def protected_route():
+    token = request.headers.get('Authorization')
+
+    if not token:
+        return jsonify({'message': 'Token is missing'}), 401
+
+    token = token.split(' ')[1]  # Extract the token from the 'Authorization' header
+
+    # Decode the token
+    payload = decode_token(token)
+
+    if isinstance(payload, str):
+        return jsonify({'message': payload}), 401
+
+    user_id = payload.get('user_id')
+
+    # Now you have the user ID, and you can perform further authorization logic
+    # Check if the user has the necessary permissions, etc.
+
+    return jsonify({'message': 'Access granted'}), 200
 
 @app.route('/forgot-password', methods=['POST'])
 def forgot_password():

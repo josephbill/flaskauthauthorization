@@ -1,6 +1,7 @@
 ## Installs 
 1. pip install cloudinary 
 2. pip install Flask. Flask-sqlalchemy. Flask-Migrate. 
+3. pip install pyJWT : json web tokens , for authorization of only valid requests. 
 
 ## Set up 
 1. Have a cloudinary account to get api key, api secret and cloud name : set them up as environmental variables or in config file that will not be exposed.
