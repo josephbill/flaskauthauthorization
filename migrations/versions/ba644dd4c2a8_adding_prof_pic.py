@@ -1,8 +1,8 @@
-"""initialmigration
+"""adding prof. pic
 
-Revision ID: c93d8b4b6fbd
-Revises: 02661335f69e
-Create Date: 2023-10-04 22:21:00.854690
+Revision ID: ba644dd4c2a8
+Revises: 7fbe1fcd3498
+Create Date: 2023-10-05 12:39:42.762279
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'c93d8b4b6fbd'
-down_revision = '02661335f69e'
+revision = 'ba644dd4c2a8'
+down_revision = '7fbe1fcd3498'
 branch_labels = None
 depends_on = None
 

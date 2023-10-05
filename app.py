@@ -1,5 +1,4 @@
 from flask import Flask, jsonify, request
-from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from datetime import datetime, timedelta
 from models.user import User
@@ -15,8 +14,8 @@ import os
 import base64
 
 app = Flask(__name__)
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://authorizationapis_user:Qq49Xas6HCpsC1vaOsV13xxuLmgtq2I7@dpg-ckesr0ua3ovc739hg3gg-a/authorizationapis'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://authorizationapis_user:Qq49Xas6HCpsC1vaOsV13xxuLmgtq2I7@dpg-ckesr0ua3ovc739hg3gg-a/authorizationapis'
 # postgresql format 
 # postgresql://username:password@hostname/database_name
 
@@ -34,7 +33,7 @@ print(secret_key)
 
 # Bind the SQLAlchemy instance to the Flask app
 # silence the initialization below for postgresql use it for sqlite. 
-# db.init_app(app)
+db.init_app(app)
 
 # Initialize Flask-Migrate
 migrate = Migrate(app, db)
@@ -87,7 +86,6 @@ def decode_token(token):
         return 'Invalid token. Please log in again.'
 
 
-# protected route example 
 # Protected route example
 @app.route('/protected', methods=['GET'])
 def protected_route():
@@ -105,11 +103,13 @@ def protected_route():
         return jsonify({'message': payload}), 401
 
     user_id = payload.get('user_id')
-
+    
     # Now you have the user ID, and you can perform further authorization logic
     # Check if the user has the necessary permissions, etc.
-
+    # the process 
     return jsonify({'message': 'Access granted'}), 200
+
+
 
 @app.route('/forgot-password', methods=['POST'])
 def forgot_password():
