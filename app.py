@@ -5,6 +5,7 @@ from models.user import User
 from models.passwordresettoken import PasswordResetToken
 from models.dbconfig import db
 from werkzeug.security import generate_password_hash, check_password_hash
+from flasgger import Swagger
 import random
 import string
 import cloudinary
@@ -14,6 +15,13 @@ import os
 import base64
 
 app = Flask(__name__)
+app.config['SWAGGER'] = {
+    'title': 'Auth and Cloudinary API docs',
+    'uiversion': 3
+}
+swagger = Swagger(app)
+# api = Api(app)
+# swagger = Swagger(api, title='Auth and Authorization', description='My Flask API Documentation for Auth using JWT and cloudinary upload.')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://authorizationapis_user:Qq49Xas6HCpsC1vaOsV13xxuLmgtq2I7@dpg-ckesr0ua3ovc739hg3gg-a/authorizationapis'
 # postgresql format 
@@ -41,11 +49,39 @@ migrate = Migrate(app, db)
 # Routes
 @app.route('/register', methods=['POST'])
 def register():
+    """
+    Register a new user.
+    ---
+    tags:
+      - Authentication
+    parameters:
+      - name: username
+        in: body
+        type: string
+        required: true
+        description: User's username
+      - name: password
+        in: body
+        type: string
+        required: true
+        description: User's password
+    responses:
+      201:
+        description: User registered successfully
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              description: Registration success message
+      400:
+        description: Bad request, invalid input data
+    """
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
 
-    hashed_password = generate_password_hash(password, method='sha256')
+    hashed_password = generate_password_hash(password, method='pbkdf2:sha256')
     new_user = User(username=username, password=hashed_password)
 
     db.session.add(new_user)
