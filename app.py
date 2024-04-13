@@ -50,7 +50,7 @@ migrate = Migrate(app, db)
 @app.route('/register', methods=['POST'])
 def register():
     """
-    Register a new user.
+    Register a new users.
     ---
     tags:
       - Authentication
