@@ -23,7 +23,7 @@ swagger = Swagger(app)
 # api = Api(app)
 # swagger = Swagger(api, title='Auth and Authorization', description='My Flask API Documentation for Auth using JWT and cloudinary upload.')
 # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://authorizationapis_tidn_user:2ojSPuvRhLLJvWhK78HLxVQITPqGhZWE@dpg-coegmp0l5elc73883lk0-a.oregon-postgres.render.com/authorizationapis_tidn'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://authorizationapis_tidn_user:2ojSPuvRhLLJvWhK78HLxVQITPqGhZWE@dpg-coegmp0l5elc73883lk0-a/authorizationapis_tidn'
 # postgresql format 
 # postgresql://username:password@hostname/database_name
 
